@@ -21,14 +21,17 @@ immutable financial ledger and a full audit trail.
   traceability from each §13.1 integrity rule to its enforcement.
 - [`docs/REQUESTS_WORKFLOW.md`](docs/REQUESTS_WORKFLOW.md) — request lifecycle
   state machine, approval/payment functions and §6/§17.1 traceability.
+- [`docs/CONTROLS_TRANSFERS.md`](docs/CONTROLS_TRANSFERS.md) — accounting control,
+  supporting documents, internal receipts and the funds-in-transit transfer rule.
 
 ## Repository layout
 
 ```
 db/
-  migrations/   ordered DDL — apply in filename order (0001 … 0010)
+  migrations/   ordered DDL — apply in filename order (0001 … 0014)
   seed/         roles & permissions, the five users + three treasuries, demo data
-  tests/        acceptance checks (psql): 0001 foundation, 0002 requests
+  tests/        acceptance checks (psql): 0001 foundation, 0002 requests,
+                0003 controls & transfers
 docs/           architecture, data-model & workflow documents
 ```
 
@@ -41,6 +44,7 @@ for f in db/migrations/*.sql db/seed/*.sql; do psql -d sepf -f "$f"; done
 # 3. run the acceptance checks (all should pass; "EXPECT FAIL" lines must error)
 psql -d sepf -f db/tests/0001_foundation_checks.sql
 psql -d sepf -f db/tests/0002_requests_checks.sql
+psql -d sepf -f db/tests/0003_controls_transfers_checks.sql
 ```
 
 The seed creates the five roles and a placeholder account for each, with locked
@@ -56,5 +60,8 @@ Row-Level Security and `SECURITY DEFINER` functions, income recording and
 reversals/adjustments; the full request lifecycle — creation, versioning, the
 First-Level Validator → Super Administrator approval workflow, full-only payments
 (no partial), insufficient-funds handling, and the Cashier's pre-approval
-disbursement (§6.5). See the architecture doc's *Open decisions* for items that
-need SEPF's written confirmation before later milestones (§19.1).
+disbursement (§6.5); accounting control with no financial effect, supporting
+documents with hash-based reuse detection, internal receipts, and manual
+treasury transfers that conserve the consolidated total via funds in transit
+(§10.3). See the architecture doc's *Open decisions* for items that need SEPF's
+written confirmation before later milestones (§19.1).
