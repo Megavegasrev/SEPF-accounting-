@@ -25,15 +25,17 @@ immutable financial ledger and a full audit trail.
   supporting documents, internal receipts and the funds-in-transit transfer rule.
 - [`docs/SALARIES.md`](docs/SALARIES.md) — salary profiles, monthly cycles, the
   advance anti-overrun ceiling and outstanding-balance settlement.
+- [`docs/INVESTMENTS_CAPITAL.md`](docs/INVESTMENTS_CAPITAL.md) — SEPF investments
+  & asset register, and shareholder capital contributions.
 
 ## Repository layout
 
 ```
 db/
-  migrations/   ordered DDL — apply in filename order (0001 … 0017)
+  migrations/   ordered DDL — apply in filename order (0001 … 0020)
   seed/         roles & permissions, the five users + three treasuries, demo data
   tests/        acceptance checks (psql): 0001 foundation, 0002 requests,
-                0003 controls & transfers, 0004 salaries
+                0003 controls & transfers, 0004 salaries, 0005 investments & capital
 docs/           architecture, data-model & workflow documents
 ```
 
@@ -48,6 +50,7 @@ psql -d sepf -f db/tests/0001_foundation_checks.sql
 psql -d sepf -f db/tests/0002_requests_checks.sql
 psql -d sepf -f db/tests/0003_controls_transfers_checks.sql
 psql -d sepf -f db/tests/0004_salaries_checks.sql
+psql -d sepf -f db/tests/0005_investments_capital_checks.sql
 ```
 
 The seed creates the five roles and a placeholder account for each, with locked
@@ -67,6 +70,8 @@ disbursement (§6.5); accounting control with no financial effect, supporting
 documents with hash-based reuse detection, internal receipts, and manual
 treasury transfers that conserve the consolidated total via funds in transit
 (§10.3); salary profiles, monthly cycles, advances with the anti-overrun ceiling
-and outstanding-balance settlement that carries debt forward (§8). See the
-architecture doc's *Open decisions* for items that need SEPF's written
+and outstanding-balance settlement that carries debt forward (§8); SEPF
+investments with an asset register and shareholder capital contributions that
+increase the large treasury only after the Accountant confirms receipt (§9). See
+the architecture doc's *Open decisions* for items that need SEPF's written
 confirmation before later milestones (§19.1).
