@@ -1,0 +1,27 @@
+-- =============================================================================
+-- SEPF Treasury — production application login role (DEPLOY-TIME, not a migration)
+-- -----------------------------------------------------------------------------
+-- The application connects with ONE least-privilege LOGIN role that is a member
+-- of both app_user and service_role, and switches privilege per request via
+-- `SET LOCAL ROLE app_user|service_role`. NEVER connect the app as a superuser.
+--
+-- Run once per environment, after the migrations have created app_user and
+-- service_role. Replace the password and copy the connection string into
+-- DATABASE_URL.
+-- =============================================================================
+
+do $$
+begin
+  if not exists (select 1 from pg_roles where rolname = 'sepf_app') then
+    create role sepf_app login password 'CHANGE_ME_strong_password' noinherit;
+  end if;
+end
+$$;
+
+-- Allow the login role to assume each privilege set (SET ROLE), without
+-- inheriting their rights by default (noinherit + explicit SET LOCAL ROLE).
+grant app_user    to sepf_app;
+grant service_role to sepf_app;
+
+-- Connection string for .env:
+--   DATABASE_URL=postgres://sepf_app:CHANGE_ME_strong_password@HOST:5432/sepf
