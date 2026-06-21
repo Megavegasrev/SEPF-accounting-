@@ -1,0 +1,12 @@
+{
+  "name": "SEPF Trésorerie",
+  "short_name": "SEPF",
+  "description": "Application de gestion de trésorerie de la SEPF.",
+  "lang": "fr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#15803d"
+}
