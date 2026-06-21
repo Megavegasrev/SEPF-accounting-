@@ -22,7 +22,7 @@ export async function disburseLoan(actor: UUID, input: z.input<typeof loanDisbur
 export async function addInstallment(actor: UUID, input: z.input<typeof loanInstallmentSchema>): Promise<LoanRepayment> {
   const v = loanInstallmentSchema.parse(input);
   return runUser(actor, async (tx) => one(await tx<LoanRepayment[]>`
-    select * from add_loan_installment(${v.loan_id}, ${v.amount}, ${v.due_date ?? null})
+    select * from add_loan_installment(${v.loan_id}, ${v.amount}, ${v.due_date})
   `));
 }
 

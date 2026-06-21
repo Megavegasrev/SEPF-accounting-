@@ -50,7 +50,17 @@ export const validationSchema = z.object({
 
 export const payRequestSchema = z.object({ request_id: uuid, idempotency_key: idem });
 export const disburseAdvanceSchema = z.object({ request_id: uuid, idempotency_key: idem });
-export const incomeSchema = z.object({ account_id: uuid, amount: fcfa, memo: z.string().trim().optional(), source_id: uuid.optional() });
+export const incomeSchema = z.object({
+  account_id: uuid,
+  amount: fcfa,
+  source_payer: z.string().trim().optional(),
+  income_type: z.string().trim().optional(),
+  purpose: z.string().trim().optional(),
+  operation_date: z.coerce.date().optional(),
+  payment_method: z.string().trim().optional(),
+  external_reference: z.string().trim().optional(),
+  project: z.string().trim().optional(),
+});
 
 // ---- controls & documents --------------------------------------------------
 export const accountingControlSchema = z.object({
@@ -130,7 +140,11 @@ export const capitalConfirmSchema = z.object({
 // ---- loans & borrowings ----------------------------------------------------
 export const loanRequestSchema = z.object({ amount: fcfa, borrower_name: nonEmpty("L'emprunteur"), purpose: z.string().trim().optional(), project: z.string().trim().optional() });
 export const loanDisburseSchema = z.object({ request_id: uuid, idempotency_key: idem });
-export const loanInstallmentSchema = z.object({ loan_id: uuid, amount: fcfa, due_date: optDate });
+export const loanInstallmentSchema = z.object({
+  loan_id: uuid,
+  amount: fcfa,
+  due_date: z.coerce.date({ required_error: "La date d'échéance est obligatoire.", invalid_type_error: "Date d'échéance invalide." }),
+});
 export const loanRepaymentSchema = z.object({ installment_id: uuid, idempotency_key: idem });
 
 export const borrowingEnterSchema = z.object({ lender_name: nonEmpty("Le prêteur"), principal: fcfa });
@@ -142,6 +156,8 @@ export const borrowingConfirmSchema = z.object({
 });
 export const borrowingRepaymentRequestSchema = z.object({
   borrowing_id: uuid, principal_part: fcfa0, interest_part: fcfa0.default(0), charges_part: fcfa0.default(0),
+  installment_number: z.coerce.number().int().positive().optional(),
+  due_date: optDate,
 }).superRefine((v, ctx) => {
   if ((v.principal_part + v.interest_part + v.charges_part) <= 0)
     ctx.addIssue({ code: "custom", message: "Une échéance de remboursement doit être positive.", path: ["principal_part"] });

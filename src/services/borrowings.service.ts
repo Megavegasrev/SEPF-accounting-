@@ -24,7 +24,8 @@ export async function confirmReceipt(actor: UUID, input: z.input<typeof borrowin
 export async function requestRepayment(actor: UUID, input: z.input<typeof borrowingRepaymentRequestSchema>): Promise<BorrowingInstallment> {
   const v = borrowingRepaymentRequestSchema.parse(input);
   return runUser(actor, async (tx) => one(await tx<BorrowingInstallment[]>`
-    select * from request_borrowing_repayment(${v.borrowing_id}, ${v.principal_part}, ${v.interest_part}, ${v.charges_part})
+    select * from request_borrowing_repayment(${v.borrowing_id}, ${v.principal_part}, ${v.interest_part},
+      ${v.charges_part}, ${v.installment_number ?? null}, ${v.due_date ?? null})
   `));
 }
 

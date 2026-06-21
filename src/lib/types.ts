@@ -62,6 +62,11 @@ export interface TreasuryBalance {
 export interface TreasuryConsolidated {
   small_treasury: number; large_treasury: number; funds_in_transit: number; total_treasury: number;
 }
+export interface IncomeEntry {
+  id: UUID; movement_id: UUID; account_id: UUID; amount: number; source_payer: string | null;
+  income_type: string | null; purpose: string | null; operation_date: Date; payment_method: string | null;
+  external_reference: string | null; project: string | null; recorded_by: UUID; idempotency_key: string; created_at: Date;
+}
 export interface TreasuryMovement {
   id: UUID; account_id: UUID; amount: number; movement_type: MovementType; reference: string;
   idempotency_key: string; movement_group_id: UUID | null; source_type: string | null;
@@ -175,7 +180,8 @@ export interface CompanyBorrowing {
 }
 export interface BorrowingInstallment {
   id: UUID; borrowing_id: UUID; request_id: UUID; principal_part: number; interest_part: number;
-  charges_part: number; status: InstallmentStatus; payment_movement_id: UUID | null; paid_by: UUID | null; paid_at: Date | null; created_at: Date;
+  charges_part: number; status: InstallmentStatus; payment_movement_id: UUID | null; paid_by: UUID | null;
+  paid_at: Date | null; created_at: Date; installment_number: number | null; due_date: Date | null;
 }
 export interface BorrowingSummary {
   borrowing_id: UUID; reference: string; lender_name: string; principal: number; status: BorrowingStatus;

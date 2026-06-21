@@ -30,11 +30,11 @@ select set_config('app.current_user_id', :acct, false);
 select (disburse_loan(:'rl','dis-loan-1')).status as loan_status;
 select balance as large_after_disburse from treasury_balances where code = 'LARGE';
 select outstanding_receivable from loan_summary where loan_id = :'loan1';
-\echo '-- schedule two instalments (400000 + 600000 = principal)'
-select (add_loan_installment(:'loan1', 400000)).id as inst1 \gset
+\echo '-- schedule two instalments (400000 + 600000 = principal); due dates mandatory'
+select (add_loan_installment(:'loan1', 400000, current_date + 30)).id as inst1 \gset
 \echo '-- EXPECT FAIL: scheduling beyond the principal'
-select add_loan_installment(:'loan1', 700000);
-select (add_loan_installment(:'loan1', 600000)).id as inst2 \gset
+select add_loan_installment(:'loan1', 700000, current_date + 30);
+select (add_loan_installment(:'loan1', 600000, current_date + 60)).id as inst2 \gset
 \echo '-- record both repayments; large returns to 5000000, receivable 0'
 select (record_loan_repayment(:'inst1','rep-1')).status as r1;
 select (record_loan_repayment(:'inst2','rep-2')).status as r2;

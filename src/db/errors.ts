@@ -51,6 +51,10 @@ const FRAGMENTS: ReadonlyArray<[RegExp, string]> = [
   [/exceed the (loan principal|outstanding (receivable|liability))/i,
     "Le montant dépasse le solde restant dû."],
   [/append-only|is immutable|read-only/i, "Cette donnée est en lecture seule et ne peut pas être modifiée."],
+  [/opening balance cannot be changed/i, "Le solde d'ouverture ne peut pas être modifié après le premier mouvement."],
+  [/account type cannot be changed|currency cannot be changed/i, "Le type ou la devise du compte ne peut pas être modifié après utilisation."],
+  [/used treasury account cannot be deleted/i, "Un compte de trésorerie utilisé ne peut pas être supprimé."],
+  [/due date is required/i, "Une date d'échéance est obligatoire pour une échéance planifiée."],
   [/authentication required/i, "Authentification requise."],
 ];
 
