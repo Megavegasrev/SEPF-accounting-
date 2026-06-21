@@ -153,6 +153,9 @@ export interface AssetRegister {
   asset_id: UUID; asset_name: string; asset_category: string; supplier: string; cost: number;
   acquired_on: Date; custodian: string | null; payment_id: UUID; request_id: UUID;
 }
+export interface Shareholder {
+  user_id: UUID; is_active: boolean; note: string | null; created_by: UUID | null; created_at: Date; updated_at: Date;
+}
 export interface CapitalContribution {
   id: UUID; reference: string; shareholder_user_id: UUID; amount: number; status: CapitalStatus;
   declared_by: UUID; declared_at: Date; confirmed_by: UUID | null; confirmed_at: Date | null;
