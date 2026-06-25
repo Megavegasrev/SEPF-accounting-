@@ -56,6 +56,6 @@ export async function revokeSession(token: string): Promise<void> {
   if (!token) return;
   const tokenHash = hashToken(token);
   await withService(async (tx: Tx) => {
-    await tx`update sessions set revoked_at = now() where token_hash = ${tokenHash} and revoked_at is null`;
+    await tx`select revoke_session(${tokenHash})`;
   });
 }

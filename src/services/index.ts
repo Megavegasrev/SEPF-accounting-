@@ -11,5 +11,6 @@ export * as capital from "@/services/capital.service";
 export * as loans from "@/services/loans.service";
 export * as borrowings from "@/services/borrowings.service";
 export * as reports from "@/services/reports.service";
+export * as admin from "@/services/admin.service";
 export { AppError, toAppError } from "@/db/errors";
 export { PERMISSIONS, can } from "@/lib/permissions";

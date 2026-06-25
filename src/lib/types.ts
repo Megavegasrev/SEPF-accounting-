@@ -38,6 +38,11 @@ export type UUID = string;
 // ---- users & security ------------------------------------------------------
 export interface Role { id: UUID; code: RoleCode; name: string; description: string | null; created_at: Date; }
 export interface Permission { id: UUID; code: string; domain: string; description: string; created_at: Date; }
+export interface Setting { key: string; value: unknown; description: string | null; updated_by: UUID | null; updated_at: Date; }
+export interface TreasuryAccount {
+  id: UUID; code: string; name: string; account_type: string; currency: string;
+  opening_balance: number; responsible_user_id: UUID | null; is_active: boolean; created_at: Date;
+}
 export interface User {
   id: UUID; email: string; full_name: string; role_id: UUID;
   status: "active" | "suspended"; password_hash: string | null; auth_user_id: UUID | null;
